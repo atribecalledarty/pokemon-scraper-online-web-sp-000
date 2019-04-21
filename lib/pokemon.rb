@@ -28,17 +28,6 @@ class Pokemon
     SQL
     
     db.execute(sql, id).map do |row|
-      new_sql = <<-SQL
-        IF EXISTS 
-          (
-            SELECT * 
-            FROM INFORMATION_SCHEMA.COLUMNS 
-            WHERE table_name = 'pokemon'
-            AND column_name = 'hp'
-          )
-        UPDATE pokemon SET hp = 60 WHERE id = ?
-      SQL
-      db.execute(new_sql, id)
       Pokemon.new(id: row[0], name: row[1], type: row[2], hp: row[3], db: db)
     end.first
   end
